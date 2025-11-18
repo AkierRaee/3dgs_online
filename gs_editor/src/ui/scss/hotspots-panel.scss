@@ -1,0 +1,160 @@
+@use 'colors.scss' as *;
+
+.hotspots-panel {
+    background-color: $bcg-dark;
+    border: 1px solid $bcg-darker;
+    border-radius: 4px;
+    margin: 4px;
+
+    .pcui-panel-header {
+        background-color: $bcg-darker;
+        border-bottom: 1px solid $bcg-darker;
+        color: $text-primary;
+        font-weight: bold;
+        padding: 8px 12px;
+    }
+
+    .hotspots-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+
+        .button {
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background: #555;
+            color: white;
+
+            &:hover {
+                background: #666;
+            }
+
+            &.button-primary {
+                background: #007ACC;
+
+                &:hover {
+                    background: #005A9B;
+                }
+            }
+        }
+    }
+
+    .hotspots-list {
+        max-height: 300px;
+        overflow-y: auto;
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+    }
+
+    .hotspot-item {
+        background: #333;
+        border: 1px solid #555;
+        border-radius: 4px;
+        margin-bottom: 8px;
+        padding: 8px;
+
+        &:hover {
+            background: #3a3a3a;
+        }
+
+        .hotspot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+
+            .hotspot-name {
+                font-weight: bold;
+                color: #fff;
+                font-size: 13px;
+            }
+
+            .button-small {
+                padding: 4px 8px;
+                font-size: 11px;
+                background: #666;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+
+                &:hover {
+                    background: #777;
+                }
+            }
+        }
+
+        .hotspot-info {
+            font-size: 11px;
+            color: #ccc;
+            margin: 2px 0;
+        }
+    }
+}
+
+// 热点对话框样式
+.hotspot-dialog {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    h3 {
+        color: $text-primary;
+        margin: 0 0 15px 0;
+        font-size: 14px;
+    }
+
+    label {
+        color: $text-primary;
+        font-size: 11px;
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 3px;
+    }
+
+    input, textarea, select {
+        background-color: $bcg-light;
+        border: 1px solid $bcg-darker;
+        color: $text-primary;
+        border-radius: 2px;
+        font-size: 11px;
+
+        &:focus {
+            outline: none;
+            border-color: #007ACC;
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+        }
+    }
+
+    button {
+        background-color: $bcg-dark;
+        border: 1px solid $bcg-darker;
+        color: $text-primary;
+        border-radius: 2px;
+        font-size: 11px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $bcg-light;
+        }
+
+        &[style*="background: #007ACC"] {
+            background-color: #007ACC !important;
+            border-color: #005a9e !important;
+
+            &:hover {
+                background-color: #005a9e !important;
+            }
+        }
+    }
+} 

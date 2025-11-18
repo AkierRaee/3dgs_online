@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热点功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #222;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 8px;
+        }
+        .feature {
+            margin: 10px 0;
+            padding: 8px;
+            background: #444;
+            border-left: 4px solid #00ff00;
+        }
+        .instruction {
+            margin: 5px 0;
+            color: #ccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>热点系统完整功能测试</h1>
+    
+    <div class="test-section">
+        <h2>🎯 热点基础功能</h2>
+        <div class="feature">
+            ✅ 取消大小限制：支持任意大小热点
+            <div class="instruction">• 在菜单中选择"添加热点"，输入任意大小值（如0.01或100）</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 3D悬浮文字：热点名称在3D空间中显示
+            <div class="instruction">• 热点上方显示固定14px文字，自动跟随热点位置</div>
+        </div>
+        
+        <div class="feature">
+            ✅ PLY绑定显示：热点与PLY同步显示/隐藏
+            <div class="instruction">• 切换PLY可见性时，热点自动同步</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⚙️ 热点调整功能</h2>
+        <div class="feature">
+            ✅ 编辑热点属性
+            <div class="instruction">• 菜单 -> "编辑热点" -> 修改名称、位置、大小</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 设置跳转目标
+            <div class="instruction">• 菜单 -> "设置跳转目标" -> 选择热点 -> 选择目标PLY</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 快速调整面板
+            <div class="instruction">• 右键点击任意热点 -> 打开详细调整面板</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 删除热点
+            <div class="instruction">• 菜单 -> "删除热点" 或在调整面板中点击删除</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔄 跳转功能</h2>
+        <div class="feature">
+            ✅ PLY间跳转
+            <div class="instruction">• 左键点击热点 -> 自动切换到目标PLY</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 跳转状态提示
+            <div class="instruction">• 成功跳转时显示确认消息，失败时显示错误信息</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💾 数据管理</h2>
+        <div class="feature">
+            ✅ 保存热点配置
+            <div class="instruction">• 菜单 -> "保存热点" -> 下载JSON文件</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 加载热点配置
+            <div class="instruction">• 菜单 -> "加载热点" -> 选择JSON文件</div>
+        </div>
+        
+        <div class="feature">
+            ✅ 项目集成
+            <div class="instruction">• 热点数据自动保存到项目文件中</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎮 交互说明</h2>
+        <div class="feature">
+            🖱️ 左键点击热点：执行跳转
+        </div>
+        <div class="feature">
+            🖱️ 右键点击热点：打开调整面板
+        </div>
+        <div class="feature">
+            ⌨️ 菜单操作：所有基本的增删改查功能
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📝 测试步骤</h2>
+        <ol style="color: #ccc;">
+            <li>加载多个PLY文件</li>
+            <li>选择第一个PLY，添加热点</li>
+            <li>设置热点跳转到第二个PLY</li>
+            <li>测试左键点击跳转</li>
+            <li>测试右键调整面板</li>
+            <li>验证PLY显示/隐藏同步</li>
+            <li>测试保存/加载功能</li>
+        </ol>
+    </div>
+</body>
+</html> 

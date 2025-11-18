@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "splatName": "sample_model",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "hotspots": [
+    {
+      "id": "hotspot_001",
+      "name": "入口大厅",
+      "position": [0, 1.8, 2],
+      "size": 1.0,
+      "description": "这里是建筑的主入口，可以看到宽敞的大厅空间",
+      "targetSplatName": "lobby_model",
+      "visible": true
+    },
+    {
+      "id": "hotspot_002", 
+      "name": "观景台",
+      "position": [5, 3, 0],
+      "size": 1.2,
+      "description": "从这里可以俯瞰整个城市景观",
+      "targetSplatName": "viewpoint_model",
+      "visible": true
+    },
+    {
+      "id": "hotspot_003",
+      "name": "花园区域",
+      "position": [-3, 0.5, -2],
+      "size": 0.8,
+      "description": "美丽的花园，适合休闲漫步",
+      "visible": true
+    }
+  ]
+} 

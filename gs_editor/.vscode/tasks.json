@@ -1,0 +1,59 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "eslint-fix-root-and-supersplat",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"\"console.log('Running eslint --fix for root and supersplat...')\"",
+				";",
+				"npx",
+				"eslint",
+				"src",
+				"--ext",
+				".ts",
+				".tsx",
+				"--fix",
+				";",
+				"npx",
+				"eslint",
+				"supersplat/src",
+				"--ext",
+				".ts",
+				".tsx",
+				"--fix"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint - stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "eslint-fix-root-and-supersplat-2",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"eslint",
+				"src",
+				"--ext",
+				".ts",
+				"--fix",
+				";",
+				"npx",
+				"eslint",
+				"supersplat/src",
+				"--ext",
+				".ts",
+				"--fix"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint - stylish"
+			],
+			"group": "build"
+		}
+	]
+}

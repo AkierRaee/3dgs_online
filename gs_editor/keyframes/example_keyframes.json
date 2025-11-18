@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "splatName": "example_splat",
+  "frameCount": 180,
+  "frameRate": 30,
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "poses": [
+    {
+      "name": "camera_0",
+      "frame": 0,
+      "position": [2, 1, 2],
+      "target": [0, 0, 0]
+    },
+    {
+      "name": "camera_1",
+      "frame": 30,
+      "position": [-2, 1, 2],
+      "target": [0, 0, 0]
+    },
+    {
+      "name": "camera_2",
+      "frame": 60,
+      "position": [-2, 1, -2],
+      "target": [0, 0, 0]
+    },
+    {
+      "name": "camera_3",
+      "frame": 90,
+      "position": [2, 1, -2],
+      "target": [0, 0, 0]
+    },
+    {
+      "name": "camera_4",
+      "frame": 120,
+      "position": [2, 1, 2],
+      "target": [0, 0, 0]
+    }
+  ]
+} 
