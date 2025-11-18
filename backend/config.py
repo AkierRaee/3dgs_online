@@ -12,8 +12,9 @@ OUTPUT_DIR: Path = DATA_DIR / "outputs"
 LOG_DIR: Path = DATA_DIR / "logs"
 
 # External tools/paths (override via env vars if needed)
+# 默认使用项目内的 gaussian-splatting 目录；可用环境变量 GAUSSIAN_SPLATTING_DIR 覆盖
 GAUSSIAN_SPLATTING_DIR: Path = Path(
-    os.getenv("GAUSSIAN_SPLATTING_DIR", BASE_DIR.parent / "gaussian-splatting")
+    os.getenv("GAUSSIAN_SPLATTING_DIR", str(BASE_DIR / "gaussian-splatting"))
 ).resolve()
 COLMAP_BIN: str = os.getenv("COLMAP_BIN", "colmap")  # in PATH or absolute
 PYTHON_EXE: str = os.getenv("PYTHON_EXE", sys.executable)
