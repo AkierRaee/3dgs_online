@@ -1,0 +1,9 @@
+python convert.py -s /data5/caoxizhe/Walle
+
+python utils/make_depth_scale.py --base_dir /data5/caoxizhe/sml --depths_dir /data5/caoxizhe/sml/depth
+
+python train.py -s /data5/caoxizhe/sml -d /data5/caoxizhe/sml/depth --eval
+python train.py -s /data5/caoxizhe/Walle_with_mask --eval
+
+python render.py -m /data5/caoxizhe/gaussian-splatting/output/Walle --video --fps 30 (--save_image)
+python metrics.py -m /data5/caoxizhe/gaussian-splatting/output/Walle_with_mask
