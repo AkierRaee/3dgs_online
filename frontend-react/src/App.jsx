@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Plus, User, Menu, Upload, X, Loader2, Play, FileArchive, 
-  Folder, Image as ImageIcon, Terminal, Download, CheckCircle, AlertCircle, Trash2 
+  Folder, Image as ImageIcon, Terminal, Download, CheckCircle, AlertCircle, Trash2, Zap, Box, Cuboid
 } from 'lucide-react';
 
 // --- Configuration ---
@@ -26,7 +26,7 @@ const Navbar = ({ onCreateClick }) => (
         className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all active:scale-95 shadow-lg shadow-white/5"
       >
         <Plus size={16} strokeWidth={3} />
-        <span>Create</span>
+        <span>创建</span>
       </button>
     </div>
   </nav>
@@ -42,10 +42,14 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
   const isProcessing = !project.done && project.status !== 'failed';
   const isFailed = project.status === 'failed';
   
-  // 缩略图和ZIP文件下载链接
-  // todo: modify thumbnail
-  const thumbUrl = project.thumbnail || "https://via.placeholder.com/400/111/333?text=Processing";
+  // 移除缩略图逻辑，只保留 ZIP 下载链接
   const zipUrl = project.zip_url ? `${API_BASE_URL}${project.zip_url}` : null;
+
+  // 辅助函数：根据模式显示不同标签
+  const getModeLabel = (mode) => {
+    if (mode === 'minigs2') return <span className="text-[10px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30 flex items-center gap-1"><Zap size={10} fill="currentColor"/> 迷你GS</span>;
+    return <span className="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30">标准</span>;
+  };
 
   return (
     <div 
@@ -56,10 +60,15 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
       <button 
         onClick={(e) => { e.stopPropagation(); onDelete(project); }}
         className="absolute top-3 right-3 z-30 p-2 bg-black/50 hover:bg-red-500/80 text-white/70 hover:text-white rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 scale-90 hover:scale-100"
-        title="Delete Project"
+        title="删除项目"
       >
         <Trash2 size={14} />
       </button>
+
+      {/* 模式标签 (左上角) */}
+      <div className="absolute top-3 left-3 z-30 opacity-80">
+         {getModeLabel(project.mode)}
+      </div>
 
       {/* 处理中状态的遮罩层 Processing state overlay */}
       {isProcessing && (
@@ -67,7 +76,7 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
           <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-4" />
           <h3 className="text-white font-medium truncate w-full">{project.scene}</h3>
           <span className="text-xs text-blue-400 font-mono mt-2 mb-4 bg-blue-500/10 px-2 py-1 rounded border border-blue-500/20">
-            {project.stage || "Initializing..."}
+            {project.stage || "初始化中..."}
           </span>
           
           {/* 动画进度条 */}
@@ -75,26 +84,27 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
             <div className="h-full bg-gradient-to-r from-blue-600 to-purple-600 w-1/3 animate-[shimmer_2s_infinite_linear]" />
           </div>
           
-          {/* 查看日志按钮 todo: fix*/}
+          {/* 查看日志按钮 */}
           <div className="flex gap-2 mt-6 opacity-60 hover:opacity-100 transition-opacity">
              <button 
                 onClick={(e) => { e.stopPropagation(); onViewLogs(project); }}
                 className="text-xs flex items-center gap-1 text-gray-300 hover:text-white bg-white/10 px-3 py-1.5 rounded-full cursor-pointer"
              >
-                <Terminal size={12} /> View Logs
+                <Terminal size={12} /> 查看日志
              </button>
           </div>
         </div>
       )}
 
-      {/* 完成或失败状态的视图 todo:fix?? */}
+      {/* 完成或失败状态的视图 */}
       {!isProcessing && (
         <>
-          <img 
-            src={thumbUrl} 
-            alt={project.scene}
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500"
-          />
+          {/* 替换 <img> 为 静态渐变背景，确保演示时不报错 */}
+          <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+             {/* 一个装饰性的图标 */}
+             <Cuboid size={64} className="text-white/5 group-hover:text-white/10 transition-colors" strokeWidth={1} />
+          </div>
+
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity pointer-events-none" />
           
           <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300 z-10">
@@ -110,7 +120,7 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
                         rel="noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         className="p-2 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-colors" 
-                        title="Download ZIP"
+                        title="下载ZIP"
                     >
                         <Download size={16} />
                     </a>
@@ -119,7 +129,7 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
                 <button 
                     onClick={(e) => { e.stopPropagation(); onViewLogs(project) }}
                     className="p-2 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-colors"
-                    title="View Logs"
+                    title="查看日志"
                 >
                     <Terminal size={16} />
                 </button>
@@ -127,12 +137,12 @@ const ProjectCard = ({ project, onClick, onViewLogs, onDelete }) => {
                 {/* 状态标签：fail或ready */}
                 {isFailed ? (
                     <span className="text-red-400 text-xs font-bold ml-auto flex items-center gap-1.5 bg-red-500/10 px-2 py-1 rounded-full border border-red-500/20">
-                        Failed
+                        失败
                     </span>
                 ) : (
                     <span className="text-green-400 text-xs font-bold ml-auto flex items-center gap-1.5 bg-green-500/10 px-2 py-1 rounded-full border border-green-500/20">
                         <CheckCircle size={12} />
-                        Ready
+                        就绪
                     </span>
                 )}
             </div>
@@ -151,7 +161,6 @@ const LogModal = ({ isOpen, onClose, project }) => {
     const logEndRef = useRef(null);
 
     // Effect：当模态框打开且有项目时，定期获取日志
-    //todo: need fix
     useEffect(() => {
         if (!isOpen || !project?.log_url) return;
         const fetchLogs = async () => {
@@ -183,7 +192,7 @@ const LogModal = ({ isOpen, onClose, project }) => {
                 <div className="flex justify-between items-center p-4 border-b border-white/5 bg-[#111]">
                     <h3 className="text-white font-mono flex items-center gap-2 text-sm">
                         <Terminal size={16} className="text-blue-400"/> 
-                        Build Logs: {project.scene}
+                        构建日志: {project.scene}
                     </h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors"><X size={20}/></button>
                 </div>
@@ -198,7 +207,7 @@ const LogModal = ({ isOpen, onClose, project }) => {
                     ) : (
                         <div className="text-gray-500 italic flex flex-col items-center justify-center h-full">
                             <Loader2 className="animate-spin mb-2" />
-                            Waiting for logs...
+                            等待日志...
                         </div>
                     )}
                     <div ref={logEndRef} />
@@ -214,17 +223,20 @@ const CreateModal = ({ isOpen, onClose, onSubmit }) => {
   const [uploadType, setUploadType] = useState('files');
   const [files, setFiles] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  
+  // 状态现在可以是 'idle', '3dgs' (loading), 'minigs2' (loading)
+  const [loadingMode, setLoadingMode] = useState(null); 
 
   if (!isOpen) return null;
 
-  // 提交表单处理函数
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // 修改：不再是单一的 handleSubmit，而是通过点击不同按钮触发不同模式
+  const handleModeSubmit = async (mode) => {
     if (!name || !files) return;
-    setIsLoading(true);
-    await onSubmit(name, files, uploadType);
-    setIsLoading(false);
+    
+    setLoadingMode(mode);
+    await onSubmit(name, files, uploadType, mode); // 传递 mode 参数
+    setLoadingMode(null);
+    
     setName('');
     setFiles(null);
   };
@@ -243,50 +255,97 @@ const CreateModal = ({ isOpen, onClose, onSubmit }) => {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-[#111] border border-white/10 w-full max-w-md rounded-2xl shadow-2xl p-8 animate-in zoom-in-95 duration-200">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-bold text-white">New Reconstruction</h2>
+          <h2 className="text-xl font-bold text-white">新建重建</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors bg-white/5 p-2 rounded-full hover:bg-white/10">
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        
+        {/* 这里去掉了 <form> 标签，改用 div 布局，因为我们有两个提交按钮 */}
+        <div className="space-y-6">
           {/* 场景名称输入框 */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">Scene Name</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. My Office Scan" className="w-full bg-black/50 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-600" autoFocus />
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">场景名称</label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="例如：我的办公室扫描" className="w-full bg-black/50 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-600" autoFocus />
           </div>
+          
+          
           {/* 输入格式选择 */}
           <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">Input Format</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">输入格式</label>
               <div className="grid grid-cols-3 gap-3">
-                  {['files', 'folder', 'zip'].map((type) => (
-                      <button key={type} type="button" onClick={() => setUploadType(type)} className={`flex flex-col items-center justify-center py-3 rounded-xl border transition-all duration-200 ${uploadType === type ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-900/50' : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10 hover:text-white'}`}>
-                          {type === 'files' && <ImageIcon size={20} className="mb-1.5"/>}
-                          {type === 'folder' && <Folder size={20} className="mb-1.5"/>}
-                          {type === 'zip' && <FileArchive size={20} className="mb-1.5"/>}
-                          <span className="text-[10px] font-bold uppercase tracking-wide">{type}</span>
+                  {[{id: 'files', name: '文件'}, {id: 'folder', name: '文件夹'}, {id: 'zip', name: '压缩包'}].map((type) => (
+                      <button key={type.id} type="button" onClick={() => setUploadType(type.id)} className={`flex flex-col items-center justify-center py-3 rounded-xl border transition-all duration-200 ${uploadType === type.id ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-900/50' : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10 hover:text-white'}`}>
+                          {type.id === 'files' && <ImageIcon size={20} className="mb-1.5"/>}
+                          {type.id === 'folder' && <Folder size={20} className="mb-1.5"/>}
+                          {type.id === 'zip' && <FileArchive size={20} className="mb-1.5"/>}
+                          <span className="text-[10px] font-bold uppercase tracking-wide">{type.name}</span>
                       </button>
                   ))}
               </div>
           </div>
+          
+
           {/* 文件上传区域 (支持拖拽) */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">Source Data</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">源数据</label>
             <div className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${isDragging ? 'border-blue-500 bg-blue-500/10 scale-[1.02]' : 'border-white/10 hover:border-white/20 hover:bg-white/5'}`} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)} onDrop={handleDrop}>
               <input type="file" multiple={uploadType !== 'zip'} webkitdirectory={uploadType === 'folder' ? "" : undefined} accept={uploadType === 'zip' ? ".zip" : "image/*"} onChange={(e) => setFiles(e.target.files)} className="hidden" id="file-upload" />
               <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center w-full h-full">
                 <div className={`p-4 rounded-full mb-3 transition-colors ${files ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-gray-400'}`}>
                     {files ? <CheckCircle size={24} /> : <Upload size={24} />}
                 </div>
-                <p className="text-sm text-white font-medium mb-1">{files ? `${files.length} file(s) ready` : "Click to browse or drop here"}</p>
-                <p className="text-xs text-gray-500">{uploadType === 'zip' ? 'Requires .zip archive' : 'Supports JPG, PNG'}</p>
+                <p className="text-sm text-white font-medium mb-1">{files ? `${files.length} 个文件已就绪` : "点击浏览或拖拽文件到此处"}</p>
+                <p className="text-xs text-gray-500">{uploadType === 'zip' ? '需要 .zip 压缩包' : '支持 JPG, PNG'}</p>
               </label>
             </div>
           </div>
-          {/* 提交按钮 */}
-          <button type="submit" disabled={!name || !files || isLoading} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3.5 rounded-xl hover:shadow-lg hover:shadow-blue-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2">
-            {isLoading ? <Loader2 className="animate-spin" /> : "Start Reconstruction"}
-          </button>
-        </form>
+          
+
+          {/* 提交按钮组 - 此处改为两个按钮 */}
+          <div className="grid grid-cols-2 gap-4 pt-2">
+             {/* 按钮 1: 普通重建 (3DGS) */}
+             <button 
+                type="button"
+                onClick={() => handleModeSubmit('3dgs')}
+                disabled={!name || !files || !!loadingMode} 
+                className="bg-[#1a1a1a] border border-white/10 hover:bg-[#252525] hover:border-blue-500/50 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-50 disabled:pointer-events-none flex flex-col items-center justify-center gap-1 group"
+            >
+                {loadingMode === '3dgs' ? (
+                    <Loader2 className="animate-spin text-blue-500" />
+                ) : (
+                    <>
+                        <div className="flex items-center gap-2 text-blue-400">
+                            <Box size={18} />
+                            <span>标准重建</span>
+                        </div>
+                        <span className="text-[10px] font-normal text-gray-500 group-hover:text-gray-400">3DGS</span>
+                    </>
+                )}
+             </button>
+
+             {/* 按钮 2: 快速重建 (MiniGS2) */}
+             <button 
+                type="button"
+                onClick={() => handleModeSubmit('minigs2')}
+                disabled={!name || !files || !!loadingMode} 
+                className="bg-gradient-to-br from-purple-900/50 to-pink-900/30 border border-purple-500/30 hover:border-purple-400 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-50 disabled:pointer-events-none flex flex-col items-center justify-center gap-1 hover:shadow-lg hover:shadow-purple-900/20 group"
+            >
+                {loadingMode === 'minigs2' ? (
+                    <Loader2 className="animate-spin text-purple-300" />
+                ) : (
+                    <>
+                        <div className="flex items-center gap-2 text-purple-300">
+                            <Zap size={18} fill="currentColor" className="text-purple-400" />
+                            <span>快速重建</span>
+                        </div>
+                        <span className="text-[10px] font-normal text-purple-200/60 group-hover:text-purple-200">MiniGS2</span>
+                    </>
+                )}
+             </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );
@@ -359,16 +418,18 @@ export default function App() {
 
 // --- 事件处理函数 -
 
-  const handleCreateProject = async (name, files, uploadType) => {
+  // 修改：添加了 'mode' 参数 ('3dgs' 或 'minigs2')
+  const handleCreateProject = async (name, files, uploadType, mode) => {
     const formData = new FormData();
     formData.append("scene_name", name);
     formData.append("upload_type", uploadType);
+    formData.append("mode", mode); // 新增：发送选择的模式到后台
     for (let i = 0; i < files.length; i++) formData.append("files", files[i]);
 
     try {
         // 发送 POST 请求到后端
         const response = await fetch(`${API_BASE_URL}/reconstruct_stream`, { method: 'POST', body: formData });
-        if (!response.ok) { alert("Upload failed: " + response.statusText); return; }
+        if (!response.ok) { alert("上传失败: " + response.statusText); return; }
         const data = await response.json();
         
         // 根据后端返回的数据创建一个新的项目对象
@@ -376,24 +437,24 @@ export default function App() {
             job_id: data.job_id,
             scene: data.scene,
             upload_type: data.upload_type,
+            mode: mode, // 记录该项目的模式，用于在卡片上显示
             log_url: data.log_url,
             status_url: data.status_url,
             done: false,
-            stage: "Uploaded",
-            //todo: fix thumbnail
-            thumbnail: "https://images.unsplash.com/photo-1621569898825-3e7916518775?w=500&auto=format&fit=crop", 
+            stage: "已上传",
+            // 移除 thumbnail 字段
         };
         setProjects(prev => [newProject, ...prev]);
         setIsModalOpen(false);
     } catch (error) {
         console.error("Creation failed", error);
-        alert("Error connecting to backend");
+        alert("连接后端时出错");
     }
   };
 
   // 处理删除项目
   const handleDeleteProject = async (project) => {
-      if (!confirm(`Are you sure you want to delete "${project.scene}"? This cannot be undone.`)) return;
+      if (!confirm(`您确定要删除 "${project.scene}" 吗？此操作无法撤销。`)) return;
 
      
       setProjects(prev => prev.filter(p => p.job_id !== project.job_id));
@@ -405,15 +466,15 @@ export default function App() {
   const handleView3D = async (project) => {
       try {
           const res = await fetch(`${API_BASE_URL}/viewer/${project.job_id}`);
-          if (!res.ok) throw new Error("Viewer not ready");
+          if (!res.ok) throw new Error("查看器未准备好");
           const data = await res.json();
           if (data.editor_url) {
               window.open(data.editor_url, '_blank');
           } else {
-              alert("Editor URL not found. Reconstruction might be incomplete.");
+              alert("未找到编辑器URL。重建可能未完成。");
           }
       } catch (e) {
-          alert("Cannot open viewer: " + e.message);
+          alert("无法打开查看器: " + e.message);
       }
   };
 
@@ -424,13 +485,13 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex items-end justify-between mb-10 border-b border-white/10 pb-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
-                <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">My Captures</h1>
-                <p className="text-gray-400">Manage and view your Gaussian Splatting reconstructions.</p>
+                <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">我的采集</h1>
+                <p className="text-gray-400">管理与查看3D高斯溅射重建项目。</p>
             </div>
             <div className="flex gap-2">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg text-xs font-mono font-bold">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"/>
-                    Backend: ONLINE
+                    后端: 在线
                 </div>
             </div>
         </div>
@@ -438,7 +499,7 @@ export default function App() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <button onClick={() => setIsModalOpen(true)} className="aspect-square rounded-2xl border-2 border-dashed border-gray-800 hover:border-blue-500/50 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center text-gray-600 hover:text-blue-400 group animate-in zoom-in-50 duration-300">
                 <div className="w-16 h-16 rounded-full bg-[#111] group-hover:bg-blue-500/20 flex items-center justify-center mb-4 transition-colors shadow-xl"><Plus size={32} /></div>
-                <span className="font-bold text-lg">New Scene</span>
+                <span className="font-bold text-lg">新场景</span>
             </button>
 
             {projects.map((project) => (

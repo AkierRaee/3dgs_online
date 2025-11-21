@@ -1,6 +1,6 @@
 # 3DGS Online
 
-前后端分离的 3D Gaussian Splatting 重建演示。前端（Gradio）上传图片，后端（FastAPI）在服务器上调用 COLMAP + gaussian-splatting 完成重建，并提供可下载的结果。
+前后端分离的 3D Gaussian Splatting 重建演示。前端（React）上传图片，后端（FastAPI）在服务器上调用 COLMAP + gaussian-splatting 完成重建，并提供可下载的结果。
 
 ## TODO
 1. 优化ui界面
@@ -8,7 +8,7 @@
 
 ## 目录结构
 - backend/ 后端服务（FastAPI）
-- frontend/ 前端（Gradio）
+- frontend/ 前端（React）
 - data/uploads 临时任务与原始图片
 - data/outputs 每个任务的重建结果
 
